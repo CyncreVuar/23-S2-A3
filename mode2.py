@@ -9,13 +9,15 @@ class Mode2Navigator:
         """
         Student-TODO: Best/Worst Case
         """
-        raise NotImplementedError()
+        self.n_pirates = n_pirates
+        self.islands = []
 
     def add_islands(self, islands: list[Island]):
         """
         Student-TODO: Best/Worst Case
         """
-        raise NotImplementedError()
+        for island in islands:
+            self.islands.append(island)
 
     def simulate_day(self, crew: int) -> list[tuple[Island|None, int]]:
         """
