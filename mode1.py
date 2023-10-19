@@ -1,5 +1,6 @@
 from island import Island
 from algorithms.mergesort import mergesort
+from data_structures.bst import BinarySearchTree
 
 class Mode1Navigator:
     """
@@ -11,32 +12,45 @@ class Mode1Navigator:
         Student-TODO: Best/Worst Case
         """
         self.crew_numbers = crew
-        self.islands = islands
+        self.islands = BinarySearchTree()
+        for island in islands:
+            self.islands.__setitem__((island.marines/island.money), island)
 
     def select_islands(self) -> list[tuple[Island, int]]:
         """
         Student-TODO: Best/Worst Case
         """
-        def island_efficiency(sort_key: Island):
-            return sort_key.money/sort_key.marines
+        # def island_efficiency(sort_key: Island):
+        #     return sort_key.money/sort_key.marines
         
-        sorted_islands_by_efficiency = mergesort(self.islands, key=island_efficiency)
+        # sorted_islands_by_efficiency = mergesort(self.islands, key=island_efficiency)
         current_crew = self.crew_numbers
-        count = (len(sorted_islands_by_efficiency)-1)
+        # count = (len(sorted_islands_by_efficiency)-1)
         island_and_crew_list = []
-        #test
         money = 0
-        while current_crew > 0 and count >= 0:
-            if current_crew >= sorted_islands_by_efficiency[count].marines:
-                current_crew -= sorted_islands_by_efficiency[count].marines
-                island_and_crew_list.append((sorted_islands_by_efficiency[count],sorted_islands_by_efficiency[count].marines))
-                money += sorted_islands_by_efficiency[count].money
+        for island_node in self.islands:
+            island = island_node.item
+            if current_crew >= island.marines:
+                current_crew -= island.marines
+                island_and_crew_list.append((island,island.marines))
             else:
-                island_and_crew_list.append((sorted_islands_by_efficiency[count],current_crew))
-                money += (current_crew * sorted_islands_by_efficiency[count].money)/sorted_islands_by_efficiency[count].marines
+                island_and_crew_list.append((island,current_crew))
+                money += (current_crew * island.money)/island.marines
                 current_crew = 0
 
-            count -= 1
+        # list version
+        # money = 0
+        # while current_crew > 0 and count >= 0:
+        #     if current_crew >= sorted_islands_by_efficiency[count].marines:
+        #         current_crew -= sorted_islands_by_efficiency[count].marines
+        #         island_and_crew_list.append((sorted_islands_by_efficiency[count],sorted_islands_by_efficiency[count].marines))
+        #         money += sorted_islands_by_efficiency[count].money
+        #     else:
+        #         island_and_crew_list.append((sorted_islands_by_efficiency[count],current_crew))
+        #         money += (current_crew * sorted_islands_by_efficiency[count].money)/sorted_islands_by_efficiency[count].marines
+        #         current_crew = 0
+
+        #     count -= 1
 
 
         return(island_and_crew_list)
@@ -47,24 +61,18 @@ class Mode1Navigator:
         """
         Student-TODO: Best/Worst Case
         """
-        def island_efficiency(sort_key: Island):
-            return sort_key.money/sort_key.marines
         
-        sorted_islands_by_efficiency = mergesort(self.islands, key=island_efficiency)
         money_list = []
-        for crew_number in crew_numbers:
-            current_crew = crew_number
-            count = (len(sorted_islands_by_efficiency)-1)
+        for current_crew in crew_numbers:
             money = 0
-            while current_crew > 0 and count >= 0:
-                if current_crew >= sorted_islands_by_efficiency[count].marines:
-                    current_crew -= sorted_islands_by_efficiency[count].marines
-                    money += sorted_islands_by_efficiency[count].money
+            for island_node in self.islands:
+                island = island_node.item
+                if current_crew >= island.marines:
+                    current_crew -= island.marines
+                    money += island.money
                 else:
-                    money += (current_crew * sorted_islands_by_efficiency[count].money)/sorted_islands_by_efficiency[count].marines
+                    money += (current_crew * island.money)/island.marines
                     current_crew = 0
-
-                count -= 1
             money_list.append(money)
         return money_list
 
@@ -72,8 +80,10 @@ class Mode1Navigator:
         """
         Student-TODO: Best/Worst Case
         """
+        self.islands.__delitem__(island.marines/island.money)
         island.money = new_money
         island.marines = new_marines
+        self.islands.__setitem__((island.marines/island.money), island)
 
 if __name__ == '__main__':
     a = Island("A", 400, 100)

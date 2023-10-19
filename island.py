@@ -1,3 +1,4 @@
+from __future__ import annotations
 from dataclasses import dataclass
 from random_gen import RandomGen
 
@@ -46,3 +47,16 @@ class Island:
             RandomGen.random() * 500,
             RandomGen.randint(0, 300),
         )
+
+    def __lt__(self, island2: Island):
+        return (self.money/self.marines) < (island2.money/island2.marines)
+    def __le__(self, island2: Island):
+        return (self.money/self.marines) <= (island2.money/island2.marines)
+    def __gt__(self, island2: Island):
+        return (self.money/self.marines) > (island2.money/island2.marines)
+    def __ge__(self, island2: Island):
+        return (self.money/self.marines) >= (island2.money/island2.marines)
+    def __eq__(self, island2: Island):
+        return (self.money/self.marines) == (island2.money/island2.marines)
+    def __ne__(self, island2: Island):
+        return (self.money/self.marines) != (island2.money/island2.marines)
